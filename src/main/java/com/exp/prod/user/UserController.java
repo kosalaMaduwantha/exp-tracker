@@ -10,15 +10,19 @@ import com.exp.prod.dtos.UserDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 
+import com.exp.prod.user.UserService;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
+    private final UserService userService = new UserService();
     
     @PostMapping("/create_user")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) {
-        System.out.println(userDto);
-        ResponseEntity<String> responseEntity = new ResponseEntity<>(
-            "User created successfully", HttpStatus.CREATED);
-        return responseEntity;
+        if (userService.createUser(userDto)) {
+            return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+        }
+        
+        return null;
     }
 }
