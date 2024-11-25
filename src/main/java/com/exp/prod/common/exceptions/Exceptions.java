@@ -18,4 +18,11 @@ public class Exceptions {
             super(message);
         }
     }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "User authentication failed")
+    public static class UserAuthenticationException extends RuntimeException {
+        public UserAuthenticationException(String message) {
+            super(message);
+        }
+    }
 }

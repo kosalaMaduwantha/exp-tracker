@@ -15,6 +15,7 @@ import io.jsonwebtoken.security.Keys;
 
 import com.exp.prod.common.Utils;
 import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
+import com.exp.prod.common.exceptions.Exceptions.UserAuthenticationException;
 import com.exp.prod.common.exceptions.Exceptions.UserNotFoundException;
 import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
@@ -83,8 +84,9 @@ public class UserManagementService {
             if (hashedPassword.equals(user.getPassword())){
                 String token = generateToken(user);
                 return token;
+            }else{
+                throw new UserAuthenticationException("User authentication failed");
             }
-            return null;
         } catch (Exception e) {
             logger.error("Error logging in user: " + e.getMessage());
             e.printStackTrace();

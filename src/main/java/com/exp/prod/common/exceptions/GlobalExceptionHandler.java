@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.common.exceptions.Exceptions.UserNotFoundException;
+import com.exp.prod.common.exceptions.Exceptions.UserAuthenticationException;
 import com.exp.prod.dtos.ErrorResponse;
 
 @ControllerAdvice
@@ -34,4 +35,16 @@ public class GlobalExceptionHandler {
          "/user/login");   
      return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(UserAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleUserAuthenticationException(UserAuthenticationException e) {
+     // Assuming CustomErrorResponse is a concrete implementation of ErrorResponse
+     ErrorResponse error = new ErrorResponse(
+         LocalDateTime.now(), 
+         HttpStatus.UNAUTHORIZED.value(), 
+         e.getMessage(), 
+         "/user/login");   
+     return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+    
 }
