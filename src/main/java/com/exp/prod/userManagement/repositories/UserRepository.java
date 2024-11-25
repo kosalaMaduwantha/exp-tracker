@@ -8,4 +8,6 @@ import com.exp.prod.userManagement.models.User;
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
 
+    User findByUserName(String userName);
+
 } 

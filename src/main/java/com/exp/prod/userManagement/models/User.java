@@ -8,7 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Data;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "users",
     uniqueConstraints = {
@@ -49,10 +56,6 @@ public class User {
     @Column(name = "temp_password")
     private String tempPassword;
 
-    public User() {
-
-    }
-
     public User(
         String userName, String email, String firstName, String lastName, 
         int phoneNumber, String password, LocalDateTime createdAt, LocalDateTime updatedAt, 
@@ -69,7 +72,5 @@ public class User {
         this.salt = salt;
         this.tempPassword = tempPassword;
     }
-
-    
 
 }

@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.exp.prod.common.Exceptions.UserAlreadyExistsException;
+import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.dtos.UserDto;
+import com.exp.prod.dtos.UserLoginDto;
 
 import jakarta.validation.Valid;
 
@@ -28,6 +29,11 @@ public class UserManagementController {
     
     @PostMapping("/register_user")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto) {
+        /*
+         * This method registers a user
+         * @param userDto: UserDto object
+         * @return ResponseEntity<String>
+         */
         try{
             if (this.userService.createUser(userDto)) {
                 return new ResponseEntity<>(
@@ -40,19 +46,23 @@ public class UserManagementController {
         return null;
     }
 
-    // @PostMapping("/login")
-    // public ResponseEntity<String> loginUser(@Valid @RequestBody UserDto userDto) {
-    //     try{
-    //         if (this.userService.loginUser(userDto)) {
-    //             return new ResponseEntity<>(
-    //                 "User logged in successfully", 
-    //                 HttpStatus.OK);
-    //         }
-    //     } catch (Exception e) {
-    //         return new ResponseEntity<>(
-    //             "Error logging in user", 
-    //             HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    //     return null;
-    // }
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
+        /*
+         * This method logs in a user
+         * @param userLoginDto: UserLoginDto object
+         * @return ResponseEntity<String>: JWT token if login is successful
+         */
+        try{
+            String token = this.userService.loginUser(userLoginDto);
+            if (token != null) {
+                return new ResponseEntity<>(
+                    token, 
+                    HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return null;
+    }
 }
