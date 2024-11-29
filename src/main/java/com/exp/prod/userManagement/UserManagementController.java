@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
+import com.exp.prod.dtos.UserUpdateDto;
 
 import jakarta.validation.Valid;
 
@@ -58,6 +59,25 @@ public class UserManagementController {
             if (token != null) {
                 return new ResponseEntity<>(
                     token, 
+                    HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return null;
+    }
+
+    @PostMapping("/update_user")
+    public ResponseEntity<String> updateUser(@Valid @RequestBody UserUpdateDto userDto) {
+        /*
+         * This method updates a user
+         * @param userDto: UserDto object
+         * @return ResponseEntity<String>
+         */
+        try{
+            if (this.userService.updateUser(userDto)) {
+                return new ResponseEntity<>(
+                    "User updated successfully", 
                     HttpStatus.OK);
             }
         } catch (Exception e) {

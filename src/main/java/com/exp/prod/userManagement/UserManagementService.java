@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 import io.jsonwebtoken.Jwts;
@@ -19,10 +20,10 @@ import com.exp.prod.common.exceptions.Exceptions.UserAuthenticationException;
 import com.exp.prod.common.exceptions.Exceptions.UserNotFoundException;
 import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
+import com.exp.prod.dtos.UserUpdateDto;
 import com.exp.prod.userManagement.models.User;
 import com.exp.prod.userManagement.repositories.UserRepository;
 import com.exp.prod.common.properties.JwtProperties;
-
 
 
 @Service
@@ -93,6 +94,26 @@ public class UserManagementService {
             throw e;
         }
     
+    }
+
+    public boolean updateUser(UserUpdateDto userUpdateDto){
+        logger.info("Updating user");
+        try {
+            User user = this.userRepository.findByUserName(userUpdateDto.getUserName());
+            if (user == null){
+                throw new UserNotFoundException("User not found");
+            }
+            Optional.ofNullable(userUpdateDto.getEmail()).ifPresent(user::setEmail);
+            Optional.ofNullable(userUpdateDto.getFirstName()).ifPresent(user::setFirstName);
+            Optional.ofNullable(userUpdateDto.getLastName()).ifPresent(user::setLastName);
+            Optional.ofNullable(userUpdateDto.getPhoneNumber()).ifPresent(user::setPhoneNumber);
+            this.userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            logger.error("Error updating user: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     private String generateToken(User user){
