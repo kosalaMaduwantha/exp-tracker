@@ -1,22 +1,19 @@
 package com.exp.prod.userManagement;
 
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
 import com.exp.prod.dtos.UserUpdateDto;
-
-import jakarta.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import com.exp.prod.dtos.SuccessResponse;
+import com.exp.prod.dtos.SuccessResponseLogin;
 
 @RestController
 @RequestMapping("/user")
@@ -29,7 +26,7 @@ public class UserManagementController {
     }
     
     @PostMapping("/register_user")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<SuccessResponse> registerUser(@Valid @RequestBody UserDto userDto) {
         /*
          * This method registers a user
          * @param userDto: UserDto object
@@ -38,7 +35,7 @@ public class UserManagementController {
         try{
             if (this.userService.createUser(userDto)) {
                 return new ResponseEntity<>(
-                    "User created successfully", 
+                    new SuccessResponse("User created successfully"), 
                     HttpStatus.CREATED);
             }
         } catch (Exception e) {
@@ -48,7 +45,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<SuccessResponseLogin> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
         /*
          * This method logs in a user
          * @param userLoginDto: UserLoginDto object
@@ -58,7 +55,7 @@ public class UserManagementController {
             String token = this.userService.loginUser(userLoginDto);
             if (token != null) {
                 return new ResponseEntity<>(
-                    token, 
+                    new SuccessResponseLogin(token), 
                     HttpStatus.OK);
             }
         } catch (Exception e) {
@@ -68,7 +65,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/update_user")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody UserUpdateDto userDto) {
+    public ResponseEntity<SuccessResponse> updateUser(@Valid @RequestBody UserUpdateDto userDto) {
         /*
          * This method updates a user
          * @param userDto: UserDto object
@@ -77,7 +74,7 @@ public class UserManagementController {
         try{
             if (this.userService.updateUser(userDto)) {
                 return new ResponseEntity<>(
-                    "User updated successfully", 
+                    new SuccessResponse("User updated successfully"), 
                     HttpStatus.OK);
             }
         } catch (Exception e) {
