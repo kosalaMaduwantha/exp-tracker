@@ -47,14 +47,41 @@ This module provides functionalities to manage users. It includes registering a 
     - If the password is incorrect, an error message is returned (***The custom exception UserAuthenticationError is being thrown***).
     - If the user is successfully logged in, a JWT token is generated and returned.
 
+- **Update User Profile**
+    - Update the user profile by providing the user details such as first name, last name, phone number, and email.
+    - The user details are validated before updating the user profile (***used DTOs to validate and transfer the data between layers***).
+    - If the user does not exist, an error message is returned (***The custom exception UserNotFoundException is being thrown***).
+    - If the user is successfully updated, a success message is returned.
+
 
 ### *Technical Features*
 
-1. [Spring Boot](#spring-boot)
-2. [Spring Security](#spring-security)
-3. [JWT Authentication](#jwt-authentication)
-4. [JPA](#jpa)
-5. [MySQL](#mysql)
+1. **Spring Boot Starter Dependencies**
+    - spring-boot-starter: Core starter, including auto-configuration support, logging, and YAML.
+    - spring-boot-starter-web: Starter for building web,including RESTful, applications using Spring MVC.
+    - spring-boot-starter-data-jpa: Starter for using Spring Data JPA with Hibernate.
+    - spring-boot-starter-validation: Starter for using Java Bean Validation with Hibernate Validator.
+    - spring-boot-starter-test: Starter for testing Spring Boot applications with libraries including JUnit, Hamcrest, and Mockito.
+  
+2. **Spring Security**
+    - JWT (JSON Web Token) authentication is used for securing the application. The [loginUser] method in UserManagementService generates a JWT token upon successful login.
+
+3. **JPA (Java Persistence API)**
+    - The project uses JPA for ORM (Object-Relational Mapping). The User entity in User is mapped to the users table in the database.
+    - The UserRepository interface extends JpaRepository for CRUD operations on the User entity.
+
+4. **Database Integration**
+    - The project uses MySQL as the primary database, as indicated by the mysql-connector-java dependency in the pom.xml file.
+    - H2 database is used for runtime, possibly for testing purposes.
+
+5. **Lombok**
+    - Lombok is used to reduce boilerplate code. Annotations like @Data, @NoArgsConstructor, and @AllArgsConstructor are used in the User class.
+  
+6. **Exception Handling**
+    - Custom exceptions like UserAlreadyExistsException, UserAuthenticationException, and UserNotFoundException are used for specific error scenarios in the UserManagementService.
+
+7. **Validation**
+    - DTOs (Data Transfer Objects) are used for validating and transferring data between layers. This is mentioned in the README.md file under the User Management section.
 
 ## API Documentation
 
