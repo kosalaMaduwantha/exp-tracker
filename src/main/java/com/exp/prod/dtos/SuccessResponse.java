@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SuccessResponseRegister {
+public class SuccessResponse {
     @NotEmpty(message = "message is required")
     private String message;
 }

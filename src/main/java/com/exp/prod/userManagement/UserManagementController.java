@@ -14,7 +14,8 @@ import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
 import com.exp.prod.dtos.UserUpdateDto;
-import com.exp.prod.dtos.SuccessResponseRegister;
+import com.exp.prod.dtos.SuccessResponse;
+import com.exp.prod.dtos.SuccessResponseLogin;
 
 @RestController
 @RequestMapping("/user")
@@ -27,7 +28,7 @@ public class UserManagementController {
     }
     
     @PostMapping("/register_user")
-    public ResponseEntity<SuccessResponseRegister> registerUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<SuccessResponse> registerUser(@Valid @RequestBody UserDto userDto) {
         /*
          * This method registers a user
          * @param userDto: UserDto object
@@ -36,7 +37,7 @@ public class UserManagementController {
         try{
             if (this.userService.createUser(userDto)) {
                 return new ResponseEntity<>(
-                    new SuccessResponseRegister("User created successfully"), 
+                    new SuccessResponse("User created successfully"), 
                     HttpStatus.CREATED);
             }
         } catch (Exception e) {
@@ -46,7 +47,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<SuccessResponseLogin> loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
         /*
          * This method logs in a user
          * @param userLoginDto: UserLoginDto object
@@ -56,7 +57,7 @@ public class UserManagementController {
             String token = this.userService.loginUser(userLoginDto);
             if (token != null) {
                 return new ResponseEntity<>(
-                    token, 
+                    new SuccessResponseLogin(token), 
                     HttpStatus.OK);
             }
         } catch (Exception e) {
@@ -66,7 +67,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/update_user")
-    public ResponseEntity<String> updateUser(@Valid @RequestBody UserUpdateDto userDto) {
+    public ResponseEntity<SuccessResponse> updateUser(@Valid @RequestBody UserUpdateDto userDto) {
         /*
          * This method updates a user
          * @param userDto: UserDto object
@@ -75,7 +76,7 @@ public class UserManagementController {
         try{
             if (this.userService.updateUser(userDto)) {
                 return new ResponseEntity<>(
-                    "User updated successfully", 
+                    new SuccessResponse("User updated successfully"), 
                     HttpStatus.OK);
             }
         } catch (Exception e) {
