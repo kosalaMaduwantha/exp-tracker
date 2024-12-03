@@ -1,22 +1,20 @@
 package com.exp.prod.userManagement;
 
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
 import com.exp.prod.dtos.UserUpdateDto;
-
-import jakarta.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import com.exp.prod.dtos.SuccessResponseRegister;
 
 @RestController
 @RequestMapping("/user")
@@ -29,7 +27,7 @@ public class UserManagementController {
     }
     
     @PostMapping("/register_user")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<SuccessResponseRegister> registerUser(@Valid @RequestBody UserDto userDto) {
         /*
          * This method registers a user
          * @param userDto: UserDto object
@@ -38,7 +36,7 @@ public class UserManagementController {
         try{
             if (this.userService.createUser(userDto)) {
                 return new ResponseEntity<>(
-                    "User created successfully", 
+                    new SuccessResponseRegister("User created successfully"), 
                     HttpStatus.CREATED);
             }
         } catch (Exception e) {
