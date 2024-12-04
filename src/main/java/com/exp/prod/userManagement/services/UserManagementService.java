@@ -1,9 +1,14 @@
-package com.exp.prod.userManagement;
+package com.exp.prod.userManagement.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
-
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
@@ -15,13 +20,14 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 import com.exp.prod.common.Utils;
+import com.exp.prod.common.dtos.UserDto;
+import com.exp.prod.common.dtos.UserLoginDto;
+import com.exp.prod.common.dtos.UserUpdateDto;
 import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.common.exceptions.Exceptions.UserAuthenticationException;
 import com.exp.prod.common.exceptions.Exceptions.UserNotFoundException;
-import com.exp.prod.dtos.UserDto;
-import com.exp.prod.dtos.UserLoginDto;
-import com.exp.prod.dtos.UserUpdateDto;
 import com.exp.prod.userManagement.models.User;
+import com.exp.prod.userManagement.models.UserPrinciple;
 import com.exp.prod.userManagement.repositories.UserRepository;
 import com.exp.prod.common.properties.JwtProperties;
 
@@ -30,14 +36,17 @@ import com.exp.prod.common.properties.JwtProperties;
 public class UserManagementService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManagementService.class);
-    private final UserRepository userRepository;
-    private final JwtProperties jwtProperties;
-    
     @Autowired
-    public UserManagementService(UserRepository userRepository, JwtProperties jwtProperties) {
-        this.userRepository = userRepository;
-        this.jwtProperties = jwtProperties;
-    }
+    private UserRepository userRepository;
+    @Autowired
+    private JwtProperties jwtProperties;
+
+    // @Autowired
+    // public UserManagementService(UserRepository userRepository, JwtProperties jwtProperties, AuthenticationManager authManager) {
+    //     this.userRepository = userRepository;
+    //     this.jwtProperties = jwtProperties;
+    //     this.authManager = authManager;
+    // }
 
     public boolean createUser(UserDto userDto){
         logger.info("Creating user");
@@ -77,6 +86,17 @@ public class UserManagementService {
     public String loginUser(UserLoginDto userLoginDto){
         logger.info("Logging in user");
         try{
+            // Authentication authentication = authManager.authenticate(
+            //     new UsernamePasswordAuthenticationToken(
+            //         userLoginDto.getUserName(), 
+            //         userLoginDto.getPassword()));
+            // if (authentication.isAuthenticated()){
+            //     User user = this.userRepository.findByUserName(userLoginDto.getUserName());
+            //     String token = generateToken(user);
+            //     return token;
+            // }else{
+            //     throw new UserAuthenticationException("User authentication failed");
+            // }
             User user = this.userRepository.findByUserName(userLoginDto.getUserName());
             if (user == null){
                 throw new UserNotFoundException("User not found");

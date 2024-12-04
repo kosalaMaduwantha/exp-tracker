@@ -1,19 +1,24 @@
-package com.exp.prod.userManagement;
+package com.exp.prod.userManagement.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.exp.prod.dtos.UserDto;
-import com.exp.prod.dtos.UserLoginDto;
-import com.exp.prod.dtos.UserUpdateDto;
-import com.exp.prod.dtos.SuccessResponse;
-import com.exp.prod.dtos.SuccessResponseLogin;
+
+import com.exp.prod.common.dtos.SuccessResponse;
+import com.exp.prod.common.dtos.SuccessResponseLogin;
+import com.exp.prod.common.dtos.UserDto;
+import com.exp.prod.common.dtos.UserLoginDto;
+import com.exp.prod.common.dtos.UserUpdateDto;
+import com.exp.prod.userManagement.services.UserManagementService;
 
 @RestController
 @RequestMapping("/user")
@@ -62,6 +67,11 @@ public class UserManagementController {
             throw e;
         }
         return null;
+    }
+
+    @GetMapping("/csrf")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
     }
 
     @PostMapping("/update_user")
