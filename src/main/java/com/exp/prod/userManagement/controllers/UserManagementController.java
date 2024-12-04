@@ -1,4 +1,4 @@
-package com.exp.prod.userManagement;
+package com.exp.prod.userManagement.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
 import com.exp.prod.dtos.UserUpdateDto;
+import com.exp.prod.userManagement.services.UserManagementService;
 import com.exp.prod.dtos.SuccessResponse;
 import com.exp.prod.dtos.SuccessResponseLogin;
 

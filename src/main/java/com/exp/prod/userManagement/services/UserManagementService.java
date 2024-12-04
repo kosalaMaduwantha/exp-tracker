@@ -1,8 +1,11 @@
-package com.exp.prod.userManagement;
+package com.exp.prod.userManagement.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,17 +33,20 @@ import com.exp.prod.common.properties.JwtProperties;
 
 
 @Service
-public class UserManagementService implements UserDetailsService {
+public class UserManagementService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManagementService.class);
-    private final UserRepository userRepository;
-    private final JwtProperties jwtProperties;
-    
     @Autowired
-    public UserManagementService(UserRepository userRepository, JwtProperties jwtProperties) {
-        this.userRepository = userRepository;
-        this.jwtProperties = jwtProperties;
-    }
+    private UserRepository userRepository;
+    @Autowired
+    private JwtProperties jwtProperties;
+
+    // @Autowired
+    // public UserManagementService(UserRepository userRepository, JwtProperties jwtProperties, AuthenticationManager authManager) {
+    //     this.userRepository = userRepository;
+    //     this.jwtProperties = jwtProperties;
+    //     this.authManager = authManager;
+    // }
 
     public boolean createUser(UserDto userDto){
         logger.info("Creating user");
@@ -80,6 +86,17 @@ public class UserManagementService implements UserDetailsService {
     public String loginUser(UserLoginDto userLoginDto){
         logger.info("Logging in user");
         try{
+            // Authentication authentication = authManager.authenticate(
+            //     new UsernamePasswordAuthenticationToken(
+            //         userLoginDto.getUserName(), 
+            //         userLoginDto.getPassword()));
+            // if (authentication.isAuthenticated()){
+            //     User user = this.userRepository.findByUserName(userLoginDto.getUserName());
+            //     String token = generateToken(user);
+            //     return token;
+            // }else{
+            //     throw new UserAuthenticationException("User authentication failed");
+            // }
             User user = this.userRepository.findByUserName(userLoginDto.getUserName());
             if (user == null){
                 throw new UserNotFoundException("User not found");
@@ -146,17 +163,6 @@ public class UserManagementService implements UserDetailsService {
             throw e;
         }
         
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
-        User user = this.userRepository.findByUserName(username);
-        if (user == null){
-            logger.error("User not found");
-            throw new UserNotFoundException("User not found");
-        }
-        return new UserPrinciple(user);
     }
     
 }
