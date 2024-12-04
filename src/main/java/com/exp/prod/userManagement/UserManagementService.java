@@ -3,7 +3,9 @@ package com.exp.prod.userManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.dao.DataIntegrityViolationException;
-
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
@@ -22,12 +24,13 @@ import com.exp.prod.dtos.UserDto;
 import com.exp.prod.dtos.UserLoginDto;
 import com.exp.prod.dtos.UserUpdateDto;
 import com.exp.prod.userManagement.models.User;
+import com.exp.prod.userManagement.models.UserPrinciple;
 import com.exp.prod.userManagement.repositories.UserRepository;
 import com.exp.prod.common.properties.JwtProperties;
 
 
 @Service
-public class UserManagementService {
+public class UserManagementService implements UserDetailsService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManagementService.class);
     private final UserRepository userRepository;
@@ -143,6 +146,17 @@ public class UserManagementService {
             throw e;
         }
         
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // TODO Auto-generated method stub
+        User user = this.userRepository.findByUserName(username);
+        if (user == null){
+            logger.error("User not found");
+            throw new UserNotFoundException("User not found");
+        }
+        return new UserPrinciple(user);
     }
     
 }
