@@ -1,4 +1,4 @@
-package com.exp.prod.dtos;
+package com.exp.prod.common.dtos;
 
 import lombok.Data;
 import jakarta.validation.constraints.NotEmpty;
@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserUpdateDto {
+public class UserLoginDto {
     @NotEmpty(message = "userName is required")
     private String userName;
-    private String email;
-    private String firstName;
-    private String lastName;
-    private int phoneNumber;
+    @NotEmpty(message = "password is required")
+    private String password;
 }

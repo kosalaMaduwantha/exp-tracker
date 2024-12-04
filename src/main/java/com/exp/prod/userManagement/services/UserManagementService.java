@@ -20,12 +20,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 import com.exp.prod.common.Utils;
+import com.exp.prod.common.dtos.UserDto;
+import com.exp.prod.common.dtos.UserLoginDto;
+import com.exp.prod.common.dtos.UserUpdateDto;
 import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.common.exceptions.Exceptions.UserAuthenticationException;
 import com.exp.prod.common.exceptions.Exceptions.UserNotFoundException;
-import com.exp.prod.dtos.UserDto;
-import com.exp.prod.dtos.UserLoginDto;
-import com.exp.prod.dtos.UserUpdateDto;
 import com.exp.prod.userManagement.models.User;
 import com.exp.prod.userManagement.models.UserPrinciple;
 import com.exp.prod.userManagement.repositories.UserRepository;

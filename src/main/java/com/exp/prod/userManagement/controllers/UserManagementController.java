@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.exp.prod.dtos.UserDto;
-import com.exp.prod.dtos.UserLoginDto;
-import com.exp.prod.dtos.UserUpdateDto;
+
+import com.exp.prod.common.dtos.SuccessResponse;
+import com.exp.prod.common.dtos.SuccessResponseLogin;
+import com.exp.prod.common.dtos.UserDto;
+import com.exp.prod.common.dtos.UserLoginDto;
+import com.exp.prod.common.dtos.UserUpdateDto;
 import com.exp.prod.userManagement.services.UserManagementService;
-import com.exp.prod.dtos.SuccessResponse;
-import com.exp.prod.dtos.SuccessResponseLogin;
 
 @RestController
 @RequestMapping("/user")

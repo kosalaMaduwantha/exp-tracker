@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.exp.prod.common.dtos.ErrorResponse;
 import com.exp.prod.common.exceptions.Exceptions.UserAlreadyExistsException;
 import com.exp.prod.common.exceptions.Exceptions.UserNotFoundException;
 import com.exp.prod.common.exceptions.Exceptions.UserAuthenticationException;
-import com.exp.prod.dtos.ErrorResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

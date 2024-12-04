@@ -1,4 +1,4 @@
-package com.exp.prod.filters;
+package com.exp.prod.common.filters;
 
 
 import jakarta.servlet.FilterChain;
