@@ -12,7 +12,7 @@ import com.exp.prod.userManagement.models.UserPrinciple;
 import com.exp.prod.userManagement.repositories.UserRepository;
 
 @Service
-public class MyUserDetailsService_ implements UserDetailsService {
+public class UserDetailsService_ implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepo;
