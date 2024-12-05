@@ -1,4 +1,4 @@
-package com.exp.prod.common.dtos;
+package com.exp.prod.common.dtos.response_dtos;
 
 import lombok.Data;
 import java.time.LocalDateTime;

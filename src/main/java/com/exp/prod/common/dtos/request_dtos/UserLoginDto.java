@@ -1,4 +1,4 @@
-package com.exp.prod.common.dtos;
+package com.exp.prod.common.dtos.request_dtos;
 
 import lombok.Data;
 import jakarta.validation.constraints.NotEmpty;

@@ -1,11 +1,16 @@
 package com.exp.prod.expenseManagement.models;
 
 import java.time.LocalDateTime;
+
+import com.exp.prod.userManagement.models.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -22,11 +27,13 @@ public class Expense {
     @Id @Column(name = "expense_id") @GeneratedValue(strategy = GenerationType.AUTO)
     private int expenseId;
 
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
     
-    @Column(name = "category_id")
-    private int categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
+    private ExpenseCategories category;
 
     @Column(name = "amount")
     private double amount;

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.exp.prod.common.dtos.SuccessResponse;
-import com.exp.prod.common.dtos.SuccessResponseLogin;
-import com.exp.prod.common.dtos.UserDto;
-import com.exp.prod.common.dtos.UserLoginDto;
-import com.exp.prod.common.dtos.UserUpdateDto;
+import com.exp.prod.common.dtos.request_dtos.UserDto;
+import com.exp.prod.common.dtos.request_dtos.UserLoginDto;
+import com.exp.prod.common.dtos.request_dtos.UserUpdateDto;
+import com.exp.prod.common.dtos.response_dtos.SuccessResponse;
+import com.exp.prod.common.dtos.response_dtos.SuccessResponseLogin;
 import com.exp.prod.userManagement.services.UserManagementService;
 
 @RestController
@@ -82,6 +84,7 @@ public class UserManagementController {
          * @return ResponseEntity<String>
          */
         try{
+            
             if (this.userService.updateUser(userDto)) {
                 return new ResponseEntity<>(
                     new SuccessResponse("User updated successfully"), 
