@@ -7,10 +7,11 @@
 ## Table of Contents
 1. [Overview](#overview)  
 2. [Features](#features)  
-3. [Getting Started](#getting-started)  
-4. [Installation](#installation)  
-5. [API Documentation](#api-documentation)  
-6. [Configuration](#configuration)  
+3. [Getting Started](#getting-started) 
+4. [Data model](#data-model) 
+5. [Installation](#installation)  
+6. [API Documentation](#api-documentation)  
+7. [Configuration](#configuration)  
 
 ---
 
@@ -53,7 +54,14 @@ This module provides functionalities to manage users. It includes registering a 
     - If the user does not exist, an error message is returned (***The custom exception UserNotFoundException is being thrown***).
     - If the user is successfully updated, a success message is returned.
 
+#### Expense management
 
+- **Adding expenses**
+- **Addign expenses categories**
+- **Recurring expenses**
+- **Adding expense notes or files**
+- **Multiple currency support**
+  
 ### *Technical Features*
 
 1. **Spring Boot Starter Dependencies**
@@ -82,6 +90,76 @@ This module provides functionalities to manage users. It includes registering a 
 
 7. **Validation**
     - DTOs (Data Transfer Objects) are used for validating and transferring data between layers. This is mentioned in the README.md file under the User Management section.
+
+## Data model
+
+### 1. **User Table**
+   Stores information about each user.
+
+   **`Users`**
+   | Column Name    | Data Type     | Description                      |
+   |----------------|---------------|----------------------------------|
+   | `user_id`      | INT (PK)      | Unique identifier for each user. |
+   | `user_name`    | VARCHAR(50)   | Unique username.                 |
+   | `first_name`   | VARCHAR(50)   | First name of the user.          |
+   | `last_name`    | VARCHAR(50)   | Last name of the user.           |
+   | `email`        | VARCHAR(100)  | User email address.              |
+   | `phone_number` | VARCHAR(15)   | User phone number.               |
+   | `temp_password`| VARCHAR(255)  | tempory password                 |
+   | `password`     | VARCHAR(255)  | Hashed password.                 |
+   | `salt`         | VARCHAR(255)  | Salt used for password hashing.  |
+   | `created_at`   | TIMESTAMP     | Date and time of user creation.  |
+   | `updated_at`   | TIMESTAMP     | Date and time of last update.    |
+   | *`currency`*   | VARCHAR(10)   | Default currency for the user.   |
+
+---
+
+### 2. **Expense Tracking**
+
+**`Expenses`**
+   | Column Name      | Data Type     | Description                              |
+   |------------------|---------------|------------------------------------------|
+   | `expense_id`     | INT (PK)      | Unique identifier for each expense.      |
+   | `user_id`        | INT (FK)      | Reference to the user who made the expense. |
+   | `category_id`    | INT (FK)      | Reference to the expense category.       |
+   | `amount`         | DECIMAL(10, 2)| Expense amount.                         |
+   | `currency`       | VARCHAR(10)   | Currency used for the expense.          |
+   | `expense_date`   | DATE          | Date of the expense.                    |
+   | `notes`          | TEXT          | Additional notes about the expense.     |
+
+**`ExpenseCategories`**
+   | Column Name      | Data Type     | Description                              |
+   |------------------|---------------|------------------------------------------|
+   | `category_id`    | INT (PK)      | Unique identifier for each category.     |
+   | `user_id`        | INT (FK)      | Reference to the user for custom categories (nullable for predefined). |
+   | `category_name`  | VARCHAR(50)   | Name of the category.                   |
+
+**`RecurringExpenses`**
+   | Column Name      | Data Type     | Description                              |
+   |------------------|---------------|------------------------------------------|
+   | `recurring_id`   | INT (PK)      | Unique identifier for each recurring expense. |
+   | `user_id`        | INT (FK)      | Reference to the user.                  |
+   | `category_id`    | INT (FK)      | Reference to the expense category.       |
+   | `amount`         | DECIMAL(10, 2)| Recurring expense amount.               |
+   | `currency`       | VARCHAR(10)   | Currency used for the recurring expense.|
+   | `frequency`      | VARCHAR(20)   | Frequency (e.g., monthly, weekly).      |
+   | `start_date`     | DATE          | Start date for the recurring expense.   |
+   | `end_date`       | DATE (nullable)| End date (nullable for indefinite).    |
+
+**`ExpenseTags`**
+   | Column Name      | Data Type     | Description                              |
+   |------------------|---------------|------------------------------------------|
+   | `tag_id`         | INT (PK)      | Unique identifier for each tag.          |
+   | `user_id`        | INT (FK)      | Reference to the user.                  |
+   | `tag_name`       | VARCHAR(50)   | Name of the tag.                        |
+
+**`ExpenseTagMap`**
+   | Column Name      | Data Type     | Description                              |
+   |------------------|---------------|------------------------------------------|
+   | `expense_id`     | INT (FK)      | Reference to an expense.                |
+   | `tag_id`         | INT (FK)      | Reference to a tag.                     |
+
+---
 
 ## API Documentation
 
