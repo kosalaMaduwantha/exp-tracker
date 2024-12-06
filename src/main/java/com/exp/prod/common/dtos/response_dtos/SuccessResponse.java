@@ -1,4 +1,4 @@
-package com.exp.prod.common.dtos;
+package com.exp.prod.common.dtos.response_dtos;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SuccessResponseLogin {
-    @NotEmpty(message = "token is required")
-    private String token;
+public class SuccessResponse {
+    @NotEmpty(message = "message is required")
+    private String message;
 }

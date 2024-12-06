@@ -25,4 +25,11 @@ public class Exceptions {
             super(message);
         }
     }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Category not found")
+    public static class CategoryNotFoundException extends RuntimeException {
+        public CategoryNotFoundException(String message) {
+            super(message);
+        }
+    }
 }
