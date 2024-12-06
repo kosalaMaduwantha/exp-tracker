@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.exp.prod.common.dtos.intermetiate.ExpenseCategoryTDto;
 import com.exp.prod.common.dtos.request_dtos.ExpenseCategoryDto;
+import com.exp.prod.common.dtos.request_dtos.ExpenseDto;
 import com.exp.prod.expenseManagement.services.ExpenseService;
 
 import jakarta.validation.Valid;
@@ -32,6 +33,24 @@ public class ExpenseController {
             if (this.expenseService.addExpenseCategory(expenseCategoryDto)) {
                 return new ResponseEntity<>(
                     "Expense category added successfully", 
+                    HttpStatus.CREATED);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return null;
+    }
+
+    @PostMapping("/create_expense")
+    public ResponseEntity<String> createExpense(@Valid @RequestBody ExpenseDto expenseDto) {
+        /*
+         * This method creates an expense
+         */
+        try{
+            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (this.expenseService.createExpense(expenseDto, userDetails.getUsername())) {
+                return new ResponseEntity<>(
+                    "Expense created successfully", 
                     HttpStatus.CREATED);
             }
         } catch (Exception e) {

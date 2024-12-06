@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,11 +15,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "expense_categories")
+@Table(name = "expense_categories",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = "category_name")})
 public class ExpenseCategories {
     @Id @Column(name = "category_id") @GeneratedValue(strategy = GenerationType.AUTO)
     private int categoryId;
-    @Column(name = "category_name")
+    @Column(name = "category_name") 
     private String categoryName;
 
     public ExpenseCategories(String categoryName) {

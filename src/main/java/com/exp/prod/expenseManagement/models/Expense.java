@@ -1,6 +1,7 @@
 package com.exp.prod.expenseManagement.models;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import com.exp.prod.userManagement.models.User;
 
@@ -42,8 +43,17 @@ public class Expense {
     private String currency;
 
     @Column(name = "expense_date")
-    private String expenseDate;
+    private LocalDateTime expenseDate;
 
     @Column(name = "created_at")
     private String notes;
+
+    public Expense(User user, ExpenseCategories category, double amount, String currency, LocalDateTime expenseDate, String notes) {
+        this.user = user;
+        this.category = category;
+        this.amount = amount;
+        this.currency = currency;
+        this.expenseDate = expenseDate;
+        this.notes = notes;
+    }
 }

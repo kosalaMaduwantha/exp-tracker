@@ -8,5 +8,5 @@ import com.exp.prod.userManagement.models.User;
 
 @Repository
 public interface ExpenseCategoryRepository extends CrudRepository<ExpenseCategories, String> {
-    
+    ExpenseCategories findByCategoryName(String categoryName);
 }
