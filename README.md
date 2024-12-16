@@ -23,11 +23,7 @@ This project is a Spring Boot application that provides Restful APIs for managin
 ### *Domain Features*
 
 1. [User Management](#user-management)
-     - Register User
-     - Login User (JWT Authentication)
-     - Update User Profile
-
-2. Expense Management
+2. [Expense Management](#expense-management)
 3. Income Management
 
 #### User Management
@@ -47,6 +43,8 @@ This module provides functionalities to manage users. It includes registering a 
     - If the user does not exist, an error message is returned (***The custom exception UserNotFoundException is being thrown***).
     - If the password is incorrect, an error message is returned (***The custom exception UserAuthenticationError is being thrown***).
     - If the user is successfully logged in, a JWT token is generated and returned.
+    - Io.jsonwebtoken library in Spring is leveraged to generate the JWT token and HMAC-SHA Algorithm is used for the encoding.
+    - As the claims, the user-name, email, firstName, lastName, and expiration time are added to the token.
 
 - **Update User Profile**
     - Update the user profile by providing the user details such as first name, last name, phone number, and email.
@@ -54,13 +52,35 @@ This module provides functionalities to manage users. It includes registering a 
     - If the user does not exist, an error message is returned (***The custom exception UserNotFoundException is being thrown***).
     - If the user is successfully updated, a success message is returned.
 
+- **Authorization security middleware**
+    - The application checks the authetication token from the request header and validates it.
+    - Validation done by the security middleware in the security fileter chain. and following are the steps taken by the middleware:
+      - Check the path of the request and if it is not a login or register path, then check the token.
+      - Authentication is done by the custom authentication filter (JTWFilter) added to the security filter chain.
+      - JWTFilter extracts the token from the request header and validates it using the JWTUtil class (Util class has methods to extract the token claims and validate the expiration time etc).
+      - If the token is valid, the request is forwarded to the controller with the decoded token information.
+    - If the token is valid, the request is forwarded to the controller.
+    - If the token is invalid, the request is rejected with a 401 Unauthorized error.
+    - Security middleware used for this purpose is from the Springs Security chain.
+
 #### Expense management
 
 - **Adding expenses**
+    - Add an expense by providing the expense details such as categoryName, amount, currency, and notes.
+    - The expense details are validated before adding the expense (***used DTOs to validate and transfer the data between layers***).
+    - If the user does not exist, an error message is returned (***The custom exception UserNotFoundException is being thrown***).
+    - If the category does not exist, an error message is returned (***The custom exception CategoryNotFoundException is being thrown***).
+    - If the expense is successfully added, a success message is returned.
 - **Addign expenses categories**
+    - Add an expense category by providing the category name.
+    - The category details are validated before adding the category (***used DTOs to validate and transfer the data between layers***).
+    - If the user does not exist, an error message is returned (***The custom exception UserNotFoundException is being thrown***).
+    - If the category is successfully added, a success message is returned.
 - **Recurring expenses**
 - **Adding expense notes or files**
 - **Multiple currency support**
+
+
   
 ### *Technical Features*
 
@@ -73,6 +93,7 @@ This module provides functionalities to manage users. It includes registering a 
   
 2. **Spring Security**
     - JWT (JSON Web Token) authentication is used for securing the application. The [loginUser] method in UserManagementService generates a JWT token upon successful login.
+    - Token is validated by the JWTFilter class in the security package. The filter extracts the token from the request header and validates it using the JWTUtil class.
 
 3. **JPA (Java Persistence API)**
     - The project uses JPA for ORM (Object-Relational Mapping). The User entity in User is mapped to the users table in the database.
@@ -217,5 +238,164 @@ This module provides functionalities to manage users. It includes registering a 
     "error": "Internal Server Error",
     "path": "/user/register_user"
 }
-`
+```
 
+### Login User
+**URL:** `/user/login`
+**Method:** `POST`
+**Description:** Logs in a user.
+**Request Body:**
+```json
+{
+    "userName":"name",
+    "password":1234
+}
+```
+
+**Response Body:**
+- Success - 201 Created
+```json
+{
+    "token": "auth_token"
+}
+```
+- Unsuccessful
+```json
+{
+    "timestamp": "2024-12-16T22:00:58.400334845",
+    "status": 404,
+    "error": "User not found",
+    "path": "/user/login"
+}
+```
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 500,
+    "error": "Internal Server Error",
+    "path": "/user/login"
+}
+```
+
+### Update User Profile
+**URL:** `/user/update_user`
+**Method:** `POST`
+**Description:** Updates the user profile.
+**Request Body:**
+```json
+{
+    "userName":"kosalaa",
+    "firstName":"Kosalama",
+    "lastName":"Maduwantha",
+    "phoneNumber":123456789,
+    "email":"kosalaaaa@gmail.com"
+}
+```
+
+**Response Body:**
+- Success - 200 OK
+```json
+{
+    "message": "User profile updated successfully"
+}
+```
+- Unsuccessful
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 404,
+    "error": "User not found",
+    "path": "/user/update_user"
+}
+```
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 500,
+    "error": "Internal Server Error",
+    "path": "/user/update_user"
+}
+```
+
+### Add Expense
+**URL:** `/expense/create_expense`
+**Method:** `POST`
+**Description:** Adds an expense.
+**Request Body:**
+```json
+{
+    "categoryName":"category",
+    "amount":1000,
+    "currency":"USD",
+    "notes":"notes"
+}
+```
+
+**Response Body:**
+- Success - 201 Created
+```json
+{
+    "message": "Expense added successfully"
+}
+```
+- Unsuccessful
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 404,
+    "error": "User not found",
+    "path": "/expense/create_expense"
+}
+```
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 404,
+    "error": "Category not found",
+    "path": "/expense/create_expense"
+}
+```
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 500,
+    "error": "Internal Server Error",
+    "path": "/expense/create_expense"
+}
+```
+
+### Add Expense Category
+**URL:** `/expense/add_expense_category`
+**Method:** `POST`
+**Description:** Adds an expense category.
+**Request Body:**
+```json
+{
+    "categoryName":"category"
+}
+```
+
+**Response Body:**
+- Success - 201 Created
+```json
+{
+    "message": "Category added successfully"
+}
+```
+- Unsuccessful
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 404,
+    "error": "User not found",
+    "path": "/expense/add_expense_category"
+}
+```
+```json
+{
+    "timestamp": "2024-11-29T20:03:19.399309146",
+    "status": 500,
+    "error": "Internal Server Error",
+    "path": "/expense/add_expense_category"
+}
+```
